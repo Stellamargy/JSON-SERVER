@@ -1,0 +1,79 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #e0f7e9;
+    color: #006400;
+    margin: 0;
+    padding: 0;
+  }
+  
+  header {
+    background-color: #32cd32;
+    color: white;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  h1, h2 {
+    margin: 0;
+    padding: 10px;
+  }
+  
+  section {
+    padding: 20px;
+  }
+  
+  form div {
+    margin-bottom: 15px;
+    width:50%;
+  }
+  
+  input[type="text"], textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #006400;
+    border-radius: 5px;
+  }
+  
+  input[type="submit"] {
+    background-color: #32cd32;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  input[type="submit"]:hover {
+    background-color: #228b22;
+  }
+
+  /* style.css */
+#card {
+    background-color: #f0fff0;
+    border: 1px solid #006400;
+    border-radius: 10px;
+    padding: 20px;
+    max-width: 300px;
+    margin: 20px ;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 100, 0, 0.1);
+  
+  }
+  
+  #card img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px 10px 0 0;
+  }
+  
+  #card h3 {
+    color: #006400;
+    margin: 10px 0;
+  }
+  
+  #card p {
+    color: #006400;
+    font-size: 14px;
+    margin: 10px 0;
+  }
+  
