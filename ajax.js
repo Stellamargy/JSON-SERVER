@@ -67,57 +67,118 @@ The configurationObject contains three core components that are needed for stand
 */
 
 
-function readAll(obj) {
-  const div = document.querySelector("#card");
-  
-  const img = document.createElement("img");
-  const h3 = document.createElement("h3");
-  const par = document.createElement("p");
-  div.append(img);
-  div.append(h3);
-  div.append(par);
-  img.src = obj.imageUrl;
-  h3.innerHTML = obj.name;
-  par.innerHTML = obj.description;
+function readData(obj) {
+  const card = document.querySelector("#card");
+  // creating elements
+  const plantContainer = document.createElement("div");
+  let plantImage = document.createElement("img");
+  let title = document.createElement("h3");
+  let description = document.createElement("p");
+  const deleteBtn = document.createElement("button");
+  const updateBtn = document.createElement("button");
+  // append the elements
+  card.append(plantContainer);
+  plantContainer.append(plantImage);
+  plantContainer.append(title);
+  plantContainer.append(description);
+  plantContainer.append(deleteBtn);
+  plantContainer.append(updateBtn);
+  // add content to the buttons
+  deleteBtn.textContent = "DELETE";
+  updateBtn.textContent = "UPDATE";
+  plantImage.src = obj.imageUrl;
+  title.textContent = obj.name;
+  description.textContent = obj.description;
+
+
+  updateBtn.addEventListener("click", ()=>{
+    const updatedName=prompt("Update Name: ");
+    if(updatedName){
+      obj.name=updatedName;
+      title.textContent=updatedName;
+      updatePlant(obj)
+    }
+  })
+
+
+  deleteBtn.addEventListener("click" , ()=>{
+    plantContainer.remove()
+    deletePlant(obj.id)
+  })
+}
+ 
+
+// Delete a plant resource
+function deletePlant(id){
+  fetch(`http://localhost:3000/plants/${id}` , {
+    method:"DELETE",
+    headers:{
+      "Content-Type":"application/json"
+    }
+  })
+  .then(res=>res.json())
+
 }
 
-// FETCH -COMES INTO PLACE .
+// updating -sending a patch request.
+function updatePlant(obj){
+  fetch(`http://localhost:3000/plants/${obj.id}`, {
+    method:"PATCH",
+    headers:{
+      "Content-Type":"application/json"
+    },
+    body:JSON.stringify(obj)
+  })
+  .then(resp=>resp.json())
+  .then(data=>readData(data))
+}
 
-// fetch  -function that is used to communicate with the server(db.json file .)
-// GET ,I just want to fetch my data.
-// fetch(endpoint).then((response=>response.json())).then ((data)=>console.log(data));
-//json()- it converts the json data to object
 
-// where you get data .
 
-// GET Request
-const fetchPlants = () => {
-  fetch("http://localhost:3000/plants")
-    .then((response) => response.json())
-    .then((data) => data.forEach((element) => readAll(element)));
-};
-fetchPlants()
+
+
+// Fetch data from the db.json(storage)
+const endpoint = "http://localhost:3000/plants";
+function fetchPlants() {
+  // promise
+  fetch(endpoint)
+    .then((res) => res.json()) // Getting data from the server
+    .then((data) =>
+      data.forEach(
+        (plant) => readData(plant) // array - iterate thr
+      )
+    );
+}
+// initialize
+fetchPlants();
+
+// Get values from form .
 const form = document.querySelector("form");
-form.addEventListener("submit", getFormInput);
-function getFormInput(e) {
-  e.preventDefault(); // stop your page from reloding.
-  const newObj = {
+form.addEventListener("submit", (e) => {
+  // stop default behaviour of a form
+  e.preventDefault();
+  const plant = {
     imageUrl: document.querySelector("#plant-img").value,
     name: document.querySelector("#plant-name").value,
     description: document.querySelector("#description").value,
   };
-  createPlant(newObj);
-}
-//post
+  
+  // calling the create plant function
+  createPlant(plant);
+  form.reset();
+  
+});
+
+// WE HAVE TO SEND DATA TO THE SERVER - POST REQUEST TO THE SERVER .
 function createPlant(obj) {
-  fetch("http://localhost:3000/plants", {
+  fetch(endpoint, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(obj),
-  })
-  .then(response=>response.json())
-  .then(data=>console.log(data));
+  }).then((res) => res.json())
+  .then(data=>readData(obj))
 }
+
 
